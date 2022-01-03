@@ -139,3 +139,22 @@ GOOD LUCK 😀
 
 // checkDogs(dogsJulia1, dogsKate1);
 // checkDogs(dogsJulia2, dogsJulia2);
+
+// const eurToUsd = 1.1;
+
+// const movementToUSD = movements.map(mov => mov * eurToUsd);
+// console.log(movements);
+// console.log(movementToUSD); 
+
+// const user = 'Steven Thomas Williams';
+
+
+const createusernames = function(accs){
+
+  for(const acc of accs){
+    acc.username = acc.owner.toLowerCase().split(' ').map(name => name[0]).join('');
+  }
+
+}
+
+createusernames(accounts);
