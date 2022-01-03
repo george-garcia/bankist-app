@@ -94,6 +94,18 @@ const displayMovements = function(movements){
   })
 }
 displayMovements(account1.movements);
+//convert dog ages to human ages and calculate the average age of the dogs in their study
+
+// function calcAverageHumanAge(ages){
+//   const humanAges = ages.map((age) => age <= 2 ? 2 * age : 16 + age * 4).filter((age) => age >= 18);
+//   const averageHumanAge = humanAges.reduce((acc, age) => acc + age, 0) / humanAges.length;
+//
+//   console.log(humanAges);
+//   console.log(averageHumanAge);
+// }
+//
+// calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
+// calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
 
 ///////////////////////////////////////
 // Coding Challenge #1
@@ -148,6 +160,16 @@ GOOD LUCK 😀
 
 // const user = 'Steven Thomas Williams';
 
+//Maximum value
+const maxValue = movements.reduce((acc, mov) => mov > acc ? mov : acc, 0);
+console.log(maxValue);
+
+
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, movements[0]);
+  labelBalance.textContent = `${balance} EUR`;
+}
+calcDisplayBalance(account1.movements);
 
 const createusernames = function(accs){
 
@@ -158,3 +180,15 @@ const createusernames = function(accs){
 }
 
 createusernames(accounts);
+
+const deposits = movements.filter((mov) => mov >= 0);
+const withdrawals = movements.filter((mov) => mov < 0);
+console.log(movements);
+console.log(deposits);
+console.log(withdrawals);
+
+//accumulator is like a snowball
+const balance = movements.reduce(function (acc, cur, i, arr){
+  return acc + cur;
+}, 0);
+console.log(balance);
