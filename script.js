@@ -107,6 +107,10 @@ displayMovements(account1.movements);
 // calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
 // calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
 
+// const calcAverageHumanAge = ages => ages.map((age) => age <= 2 ? 2 * age : 16 + age * 4).filter((age) => age >= 18).reduce((acc, age, i, arr) => acc + age / arr.length, 0);
+// console.log(calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]));
+// console.log(calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]));
+
 ///////////////////////////////////////
 // Coding Challenge #1
 
@@ -204,3 +208,35 @@ const balance = movements.reduce(function (acc, cur, i, arr){
   return acc + cur;
 }, 0);
 console.log(balance);
+
+//find method
+// const firstWithdrawal = movements.find(mov => mov < 0);
+//
+// const account = accounts.find(acc => acc.owner === 'Jessica Davis');
+// console.log(account);
+
+// let jd = null;
+// for(const acc of accounts){
+//   if(acc.owner === 'Jessica Davis'){
+//     const jd = acc;
+//     break;
+//   }
+// }
+// console.log(jd);
+
+// Event handler
+
+let currentAccount;
+
+btnLogin.addEventListener('click', function (e){
+  //prevent form from submitting
+  e.preventDefault();
+
+  currentAccount = accounts.find(acc => acc.username === Number(inputLoginUsername.value));
+
+  if(currentAccount?.pin === inputLoginPin.value){
+    //Display ui and welcome
+    labelWelcome.textContent = `Welcome back, ${currentAccount.own}`
+  }
+
+})
