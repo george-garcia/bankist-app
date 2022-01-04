@@ -93,7 +93,6 @@ const displayMovements = function(movements){
 
   })
 }
-displayMovements(account1.movements);
 //convert dog ages to human ages and calculate the average age of the dogs in their study
 
 // function calcAverageHumanAge(ages){
@@ -169,11 +168,10 @@ const maxValue = movements.reduce((acc, mov) => mov > acc ? mov : acc, 0);
 console.log(maxValue);
 
 
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, movements[0]);
-  labelBalance.textContent = `${balance} EUR`;
+const calcDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${acc.balance} EUR`;
 }
-calcDisplayBalance(account1.movements);
 
 const createusernames = function(accs){
 
@@ -182,18 +180,27 @@ const createusernames = function(accs){
   }
 }
 
-const calcDisplaySummary = function(movements){
-  const incomes = movements.filter(mov => mov > 0).reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes}`;
+function updateUI(acc){
+  //Display movements
+  displayMovements(acc.movements);
 
-  const out = movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out)}`;
+  //Display Balance
+  calcDisplayBalance(acc);
 
-  const interest = movements.filter(mov => mov > 0).map(deposit => deposit * 1.2 / 100).filter((int, i, arr) => int >= 1).reduce((acc, interest) => acc + interest, 0);
-  labelSumInterest.textContent = `${interest}`
+  //Display summary
+  calcDisplaySummary(acc);
 }
 
-calcDisplaySummary(account1.movements);
+const calcDisplaySummary = function(acc){
+  const incomes = acc.movements.filter(mov => mov > 0).reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${incomes}`;
+
+  const out = acc.movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `${Math.abs(out)}`;
+
+  const interest = acc.movements.filter(mov => mov > 0).map(deposit => deposit * acc.interestRate / 100).filter((int, i, arr) => int >= 1).reduce((acc, interest) => acc + interest, 0);
+  labelSumInterest.textContent = `${interest}`
+}
 
 createusernames(accounts);
 
@@ -232,11 +239,59 @@ btnLogin.addEventListener('click', function (e){
   //prevent form from submitting
   e.preventDefault();
 
-  currentAccount = accounts.find(acc => acc.username === Number(inputLoginUsername.value));
+  currentAccount = accounts.find(acc => acc.username === inputLoginUsername.value);
 
-  if(currentAccount?.pin === inputLoginPin.value){
+  if(currentAccount?.pin === Number(inputLoginPin.value)){
     //Display ui and welcome
-    labelWelcome.textContent = `Welcome back, ${currentAccount.own}`
+    labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]}`;
+    containerApp.style.opacity = 100;
   }
 
+  //Clear input fields
+  inputLoginUsername.value = inputLoginPin.value = '';
+  inputLoginPin.blur();
+
+  updateUI(currentAccount);
+
+  // //Display movements
+  // displayMovements(currentAccount.movements);
+  //
+  // //Display Balance
+  // calcDisplayBalance(currentAccount);
+  //
+  // //Display summary
+  // calcDisplaySummary(currentAccount);
+
+});
+
+btnTransfer.addEventListener('click', function(e){
+  e.preventDefault();
+
+  const amount = Number(inputTransferAmount.value);
+  const receiverAcc = accounts.find(acc => acc.username === inputTransferTo.value);
+
+  if(amount > 0 && currentAccount.balance >= amount && receiverAcc?.username !== currentAccount.username && receiverAcc){
+    console.log('Transfer valid');
+    receiverAcc.movements.push(Number(inputTransferAmount.value));
+    currentAccount.movements.push(Number(inputTransferAmount.value) * -1);
+    console.log(receiverAcc, currentAccount);
+  }
+
+  updateUI(currentAccount);
+});
+
+btnClose.addEventListener('click', function (e){
+  e.preventDefault();
+
+  if(currentAccount.username === inputCloseUsername.value &&
+      currentAccount.pin === Number(inputClosePin.value)){
+    console.log('delet');
+  } else {
+    console.log('fail');
+    console.log(currentAccount.username, inputCloseUsername.value, currentAccount.pin, inputClosePin.value);
+  }
+
+
 })
+
+console.log(accounts);
