@@ -75,10 +75,12 @@ const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
 
-const displayMovements = function(movements){
+const displayMovements = function(movements, sort = false){
   containerMovements.innerHTML = '';
 
-  movements.forEach(function(mov, i, arr){
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function(mov, i, arr){
 
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
@@ -286,6 +288,18 @@ btnClose.addEventListener('click', function (e){
   if(currentAccount.username === inputCloseUsername.value &&
       currentAccount.pin === Number(inputClosePin.value)){
     console.log('delet');
+
+    inputCloseUsername.value = inputClosePin.value = '';
+
+    //get index of account to be deleted
+    const index = accounts.findIndex(acc => acc.username === currentAccount.username);
+
+    //delete account
+    accounts.splice(index, 1);
+
+    //hide ui
+    containerApp.style.opacity = 0;
+
   } else {
     console.log('fail');
     console.log(currentAccount.username, inputCloseUsername.value, currentAccount.pin, inputClosePin.value);
@@ -294,4 +308,24 @@ btnClose.addEventListener('click', function (e){
 
 })
 
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  const amount = Number(inputLoanAmount.value);
+
+  if(amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)){
+    currentAccount.movements.push(amount);
+
+    updateUI(currentAccount);
+  }
+
+})
+
 console.log(accounts);
+
+let sorted = false;
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+})
