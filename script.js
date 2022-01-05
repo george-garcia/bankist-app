@@ -328,4 +328,19 @@ btnSort.addEventListener('click', function (e) {
   e.preventDefault();
   displayMovements(currentAccount.movements, !sorted);
   sorted = !sorted;
-})
+});
+
+const convertTitleCase = function(sentence){
+
+  const exceptions = ['a', 'an', 'the', 'but', 'or', 'on', 'in', 'with'];
+
+  const newSentence = sentence.split(' ').map(word => {
+    if(!exceptions.includes(word)){
+      return word[0].toUpperCase() + word.slice(1);
+    }
+    return word;
+  }).join(' ');
+  console.log(newSentence);
+};
+
+convertTitleCase('this is a nice title');
