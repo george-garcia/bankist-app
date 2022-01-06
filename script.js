@@ -344,3 +344,61 @@ const convertTitleCase = function(sentence){
 };
 
 convertTitleCase('this is a nice title');
+
+const dogs = [
+  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+  { weight: 8, curFood: 200, owners: ['Matilda'] },
+  { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+  { weight: 32, curFood: 340, owners: ['Michael'] }
+];
+
+//Loop over array, calculate recommended portion, add it as an object property
+//formula recommendedFood = weight **0.75 * 28
+
+function formatTextLittle(arr, little = true){
+  let tooLittleText = '';
+  for(let i = 0; i < arr.length; i++){
+    tooLittleText = tooLittleText + arr[i];
+    if(i < arr.length - 1){
+      tooLittleText += ' and ';
+    }
+  }
+  little ? tooLittleText += '\'s dogs eat too little!' : tooLittleText += '\'s dogs eat too much!';
+  console.log(tooLittleText);
+}
+
+let ownersEatTooMuch = [];
+let ownersEatTooLittle = [];
+
+function calcRecFood(doggies){
+
+  for(const dog of doggies){
+    dog.recommendedFood = Math.trunc(dog.weight ** 0.75 * 28);
+  }
+
+  for(const dog of doggies){
+
+    console.log(`Dog owners: ${[...dog.owners]}`)
+
+    if(dog.owners.includes('Sarah')){
+      dog.curFood > dog.recommendedFood ? console.log('Your dog is eating too much') : console.log('Your dog isn\'t eating enough');
+    }
+
+    //Check to see if dogs are eating too much or too little
+    dog.curFood > dog.recommendedFood ? ownersEatTooMuch.push(...dog.owners) : ownersEatTooLittle.push(...dog.owners);
+
+    //Check to see if ay dog is eating exactly the account of food recommended
+    console.log(`Exact food: ${dog.curFood === dog.recommendedFood}`);
+
+    //Check to see if any dog is eating an OKAY amount of food
+    let above = dog.recommendedFood + (dog.recommendedFood * .10);
+    let below = dog.recommendedFood - (dog.recommendedFood * .10);
+    dog.curFood < above && dog.curFood > below ? console.log('Dog is eatig an OKAY amount of food') : console.log('Dog is not eating an OKAY amount of food');
+
+  }
+}
+
+calcRecFood(dogs);
+console.log(dogs);
+formatTextLittle(ownersEatTooLittle);
+formatTextLittle(ownersEatTooMuch, false);
