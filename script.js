@@ -75,10 +75,10 @@ const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
 
-const displayMovements = function(movements, sort = false){
+const displayMovements = function(acc, sort = false){
   containerMovements.innerHTML = '';
 
-  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  const movs = sort ? acc.movements.slice().sort((a, b) => a - b) : acc.movements;
 
   movs.forEach(function(mov, i, arr){
 
@@ -184,7 +184,7 @@ const createusernames = function(accs){
 
 function updateUI(acc){
   //Display movements
-  displayMovements(acc.movements);
+  displayMovements(acc);
 
   //Display Balance
   calcDisplayBalance(acc);
@@ -233,9 +233,24 @@ console.log(balance);
 // }
 // console.log(jd);
 
+
 // Event handler
 
 let currentAccount;
+
+//FAKE ALWAYS LOGGED IN
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
+
+const now = new Date();
+const day = `${now.getDate()}`.padStart(2, 0);
+const month = now.getMonth() + 1;
+const year = now.getFullYear();
+const hour = now.getHours();
+const min = now.getMinutes();
+
+labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`
 
 btnLogin.addEventListener('click', function (e){
   //prevent form from submitting
@@ -326,7 +341,7 @@ console.log(accounts);
 let sorted = false;
 btnSort.addEventListener('click', function (e) {
   e.preventDefault();
-  displayMovements(currentAccount.movements, !sorted);
+  displayMovements(currentAccount, !sorted);
   sorted = !sorted;
 });
 
